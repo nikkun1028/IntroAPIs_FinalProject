@@ -34,5 +34,5 @@ sample response body:
 <br />
 <br />
 
-## About Monster Hunter:
+## Other Info:
 if there is anything.
