@@ -5,7 +5,7 @@ Due 4/26/2023 at 11:40PM
 <br />
 Rei Imai (24134776)
 <br />
-Monter Hunter API
+Monster Hunter API
 <br />
 <br />
 
@@ -34,5 +34,5 @@ sample response body:
 <br />
 <br />
 
-## Other info:
+## About Monster Hunter:
 if there is anything.
