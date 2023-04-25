@@ -6,7 +6,7 @@ Monter Hunter API
 <br />
 <br />
 
-### Submission Must Include:
+## Submission Must Include:
 1. `README.md` on root repo
 2. `.sql` code for database
 3. Three API endpoints
@@ -16,18 +16,15 @@ Monter Hunter API
 
 <br />
 
-### Documentation:
+## Documentation:
 what's this API about?
 > description here
 
-<br />
 endpoints that a client can use:
 > this is a text
 
-<br />
 sample request body:
 > this is request body
 
-<br />
 sample response body:
 > this is response body
