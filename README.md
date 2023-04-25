@@ -20,7 +20,7 @@ Monster Hunter API
 
 ## Documentation:
 what's this API about?
-> description here
+> Monster Hunter API allows a client to see information about the player's armor, weapon, and other fun status.
 
 endpoints that a client can use:
 > this is a text
