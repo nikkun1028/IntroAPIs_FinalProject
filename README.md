@@ -12,7 +12,7 @@ Rei Imai (24134776)
 2. `.sql` code for database ✅
 3. three API endpoints and three HTTP methods 🛑
 4. at least one controller ✅
-5. basic response model (statusCode, statusDescription, list of items) 🛑
+5. basic response model (statusCode, statusDescription, list of items) ✅
 
 <br />
 <br />
@@ -42,7 +42,7 @@ endpoints and HTTP methods that a client can use:
 
 
 
-sample request body:
+sample request/response body:
 > this is a request body for POST api/Player <br />
 any misspelling of the property name will cause it to be null <br />
 which will possibly throw an error because of the database constraints.
