@@ -19,10 +19,13 @@ Rei Imai (24134776)
 
 ## Documentation:
 what's this API about?
-> Monster Hunter API allows a client to see information about the player's armor, weapon, and other fun status.
+> Monster Hunter API allows a client to see information about player, player's weapon, and its weapon type.
 
 endpoints that a client can use:
-> this is a text
+> 3 endpoints and available HTTP methods for each endpoint are following:
+```GET, PUT, DELETE     api/Player```
+```GET, PUT, DELETE     api/Weapon```
+```GET     api/WeaponType```
 
 sample request body:
 > this is request body
