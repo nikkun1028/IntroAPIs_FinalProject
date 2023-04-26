@@ -52,11 +52,11 @@ sample response body:
 > this is a response body for GET api/Weapon/4 <br />
 ```
 {
-  "weaponID": 4,
-  "weaponType": null,
-  "weaponName": "Kamura Glintblades I",
-  "atk": 50,
-  "critical": 0
+  "statusCode": 200,
+  "statusDescription": "GET successful",
+  "weapons":[{ 
+    "weaponID":4,"weaponType":null,"weaponName":"Kamura Glintblades I","atk":50,"critical":0
+   }]
 }
 ```
 
