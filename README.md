@@ -35,11 +35,11 @@ sample response body:
 <br />
 <br />
 
-## Problems:
+## Problems/Concerns:
 if there is anything.
 
 <br />
 <br />
 
-## Monster Hunter:
+## MonsterHunter Rise/SunBreak:
 it's a very good game you should play.
