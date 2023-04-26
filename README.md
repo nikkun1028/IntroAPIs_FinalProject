@@ -19,7 +19,7 @@ Rei Imai (24134776)
 
 ## Documentation:
 what's this API about?
-> Monster Hunter API allows a client to see information about player, player's weapon, and its weapon type.
+> Monster Hunter API allows a client to see information about player, player's weapon equipment, and its weapon type.
 
 endpoints that a client can use:
 > 3 endpoints and available HTTP methods for each endpoint are following: <br />
@@ -42,7 +42,7 @@ sample response body:
 <br />
 
 ## Problems/Concerns:
-if there is anything.
+Wanted to add more to the database about Monsters too, but it's going to be useless (since not really connected to any of other tables) for this project so I decided not to include here. 
 
 <br />
 <br />
