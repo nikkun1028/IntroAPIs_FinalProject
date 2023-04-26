@@ -42,7 +42,7 @@ endpoints and HTTP methods that a client can use:
 
 
 
-sample request/response body:
+sample request body:
 > this is a request body for `POST api/Player` <br />
 any misspelling of the property name will cause it to be null <br />
 which will possibly throw an error because of the database constraints. <br />
