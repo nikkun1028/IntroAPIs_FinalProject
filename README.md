@@ -29,10 +29,13 @@ endpoints that a client can use:
 
 sample request body:
 > this is request body <br />
-```GET    https://localhost:7265/api/Weapon/4```
+```PUT    https://localhost:7265/api/Player``` <br />
+```{}```
+
+
 
 sample response body:
-> this is response body <br />
+> this is response body for GET api/Weapon/4 <br />
 ```{"weaponID":4,"weaponType":null,"weaponName":"Kamura Glintblades I","atk":50,"critical":0}```
 
 <br />
