@@ -9,13 +9,14 @@ Monster Hunter API
 <br />
 <br />
 
-## Submission Must Include:
-1. `README.md` on root repo
-2. `.sql` code for database
-3. three API endpoints and three HTTP methods
-4. at least one controller
-5. basic response model (statusCode, statusDescription, list of items)
+## Submission Checklist:
+1. `README.md` on root repo ✅
+2. `.sql` code for database ✅
+3. three API endpoints and three HTTP methods 🛑
+4. at least one controller ✅
+5. basic response model (statusCode, statusDescription, list of items) 🛑
 
+<br />
 <br />
 
 ## Documentation:
@@ -34,5 +35,11 @@ sample response body:
 <br />
 <br />
 
-## Other Info:
+## Problems:
 if there is anything.
+
+<br />
+<br />
+
+## Monster Hunter:
+it's a very good game you should play.
