@@ -25,35 +25,48 @@ namespace MonsterHunterAPI.Controllers
 
         // GET: api/Weapon
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Weapon>>> GetWeapons()
+        public async Task<ActionResult<ResponseWeapon>> GetWeapons()
         {
-          if (_context.Weapons == null)
-          {
-              return NotFound();
-          }
+            var weapons = await _context.Weapons.ToListAsync();
+            var response = new ResponseWeapon();
 
-            //client.status();
-            return await _context.Weapons.ToListAsync();
+            response.statusCode = 404;
+            response.statusDescription = "Item Not Found";
+
+            if (weapons != null)
+            {
+                response.statusCode = 200;
+                response.statusDescription = "GET successful";
+                response.weapons.AddRange(weapons);
+            }
+
+            return response;
         }
 
         // GET: api/Weapon/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Weapon>> GetWeapon(int id)
+        public async Task<ActionResult<ResponseWeapon>> GetWeapon(int id)
         {
-          if (_context.Weapons == null)
-          {
-              return NotFound();
-          }
-            var weapon = await _context.Weapons.FindAsync(id);
+            var weapons = await _context.Weapons.FindAsync(id);
+            var response = new ResponseWeapon();
 
-            if (weapon == null)
+            response.statusCode = 404;
+            response.statusDescription = "Item Not Found";
+
+            if (weapons != null)
             {
-                return NotFound();
+                response.statusCode = 200;
+                response.statusDescription = "GET successful";
+                response.weapons.Add(weapons);
             }
 
-            return weapon;
+
+
+            return response;
         }
 
+
+        
         // PUT: api/Weapon/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -84,6 +97,7 @@ namespace MonsterHunterAPI.Controllers
 
             return NoContent();
         }
+        
 
         // POST: api/Weapon
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

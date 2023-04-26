@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MonsterHunterAPI.Models;
-using System.Windows.
 
 namespace MonsterHunterAPI.Controllers
 {
@@ -23,36 +22,46 @@ namespace MonsterHunterAPI.Controllers
 
         // GET: api/Player
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
+        public async Task<ActionResult<ResponsePlayer>> GetPlayers()
         {
+            var player = await _context.Players.ToListAsync();
+            var response = new ResponsePlayer();
 
-          if (_context.Players == null)
-          {
-              return NotFound();
-          }
+            response.statusCode = 404;
+            response.statusDescription = "Item Not Found";
 
-         
-            return await _context.Players.ToListAsync();
+            if (player != null) {
+                response.statusCode = 200;
+                response.statusDescription = "GET successful";
+                response.players.AddRange(player);
+            }
+
+            return response;
         }
 
         // GET: api/Player/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Player>> GetPlayer(int id)
+        public async Task<ActionResult<ResponsePlayer>> GetPlayer(int id)
         {
-          if (_context.Players == null)
-          {
-              return NotFound();
-          }
             var player = await _context.Players.FindAsync(id);
+            var response = new ResponsePlayer();
 
-            if (player == null)
-            {
-                return NotFound();
-            }
+            response.statusCode = 404;
+            response.statusDescription = "Item Not Found";
 
-            return player;
+          if (player != null)
+          {
+                response.statusCode = 200;
+                response.statusDescription = "GET successful";
+                response.players.Add(player);
+          }
+
+
+
+            return response;
         }
 
+        
         // PUT: api/Player/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
@@ -83,21 +92,37 @@ namespace MonsterHunterAPI.Controllers
 
             return NoContent();
         }
+        
 
         // POST: api/Player
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Player>> PostPlayer(Player player)
+        public async Task<ActionResult<ResponsePlayer>> PostPlayer(Player player)
         {
-          if (_context.Players == null)
-          {
-              return Problem("Entity set 'MonsterHunterDBContext.Players'  is null.");
-          }
-            _context.Players.Add(player);
-            await _context.SaveChangesAsync();
+            var response = new ResponsePlayer();
 
-            return CreatedAtAction("GetPlayer", new { id = player.PlayerID }, player);
+            response.statusCode = 404;
+            response.statusDescription = "Entity Set Player Not Found";
+
+            if (_context.Players != null)
+            {
+                //return Problem("Entity set 'MonsterHunterDBContext.WeaponTypes'  is null.");
+                _context.Players.Add(player);
+                await _context.SaveChangesAsync();
+
+
+                response.statusCode = 201;
+                response.statusDescription = "Item Created";
+                response.players.Add(player);
+            }
+           
+            
+
+            return response;
+
+
         }
+
 
         // DELETE: api/Player/5
         [HttpDelete("{id}")]

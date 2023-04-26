@@ -12,28 +12,28 @@ CREATE TABLE WeaponTypes (
 );
 
 
-CREATE TABLE Weapon (
+CREATE TABLE Weapons (
     WeaponID INT NOT NULL AUTO_INCREMENT,
-    WeaponTypeID INT NOT NULL,
+    WeaponTypeID INT,
     WeaponName VARCHAR(22) NOT NULL UNIQUE,
     ATK INT NOT NULL,
     Critical INT,
 
 
     PRIMARY KEY (WeaponID),
-    FOREIGN KEY (WeaponTypeID) REFERENCES WeaponType(WeaponTypeID),
+    FOREIGN KEY (WeaponTypeID) REFERENCES WeaponTypes(WeaponTypeID),
     CHECK (ATK > 0), -- additional constraint
     CHECK (Critical >= -50 and Critical <= 100)
 );
 
 
-CREATE TABLE Player (
+CREATE TABLE Players (
     PlayerID INT NOT NULL AUTO_INCREMENT,
     PlayerName VARCHAR(16) NOT NULL,
-    WeaponID INT NOT NULL,
+    WeaponID INT,
 
     PRIMARY KEY (PlayerID),
-    FOREIGN KEY (WeaponID) REFERENCES Weapon(WeaponID)
+    FOREIGN KEY (WeaponID) REFERENCES Weapons(WeaponID)
 );
 
 
@@ -55,7 +55,7 @@ INSERT INTO Weapons (WeaponTypeID, WeaponName, ATK, Critical) VALUES
 (1, "Kamura Cleaver I", 50, 0),
 (2, "Kamura Blade I", 50, 0),
 (3, "Kamura Sword I", 50, 0),
-(4, "Kamura Glintblades I", 50, 0);
+(4, "Kamura Glintblades I", 50, 0),
 (5, "Kamura Spear I", 50, 0),
 (6, "Kamura Gunlance I", 50, 0),
 (7, "Kamura Hammer I", 50, 0),
@@ -71,6 +71,9 @@ INSERT INTO Weapons (WeaponTypeID, WeaponName, ATK, Critical) VALUES
 INSERT INTO Players (PlayerName, WeaponID) VALUES
 ("MonsterHunter", 4),
 ("RayRay", 1),
-("ProMH", 2);
+("ProMH", 2),
+("Daniel321", 10),
+("JustinBeBird", 6),
+("iamhungry", 14);
 
 

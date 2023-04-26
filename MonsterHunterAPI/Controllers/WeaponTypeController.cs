@@ -22,31 +22,44 @@ namespace MonsterHunterAPI.Controllers
 
         // GET: api/WeaponType
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<WeaponType>>> GetWeaponTypes()
+        public async Task<ActionResult<ResponseWeaponType>> GetWeaponTypes()
         {
-          if (_context.WeaponTypes == null)
-          {
-              return NotFound();
-          }
-            return await _context.WeaponTypes.ToListAsync();
+            var weaponTypes = await _context.WeaponTypes.ToListAsync();
+            var response = new ResponseWeaponType();
+
+            response.statusCode = 404;
+            response.statusDescription = "Item Not Found";
+
+            if (weaponTypes != null)
+            {
+                response.statusCode = 200;
+                response.statusDescription = "GET successful";
+                response.weaponTypes.AddRange(weaponTypes);
+            }
+
+            return response;
         }
 
         // GET: api/WeaponType/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<WeaponType>> GetWeaponType(int id)
+        public async Task<ActionResult<ResponseWeaponType>> GetWeaponType(int id)
         {
-          if (_context.WeaponTypes == null)
-          {
-              return NotFound();
-          }
-            var weaponType = await _context.WeaponTypes.FindAsync(id);
+            var weaponTypes = await _context.WeaponTypes.FindAsync(id);
+            var response = new ResponseWeaponType();
 
-            if (weaponType == null)
+            response.statusCode = 404;
+            response.statusDescription = "Item Not Found";
+
+            if (weaponTypes != null)
             {
-                return NotFound();
+                response.statusCode = 200;
+                response.statusDescription = "GET successful";
+                response.weaponTypes.Add(weaponTypes);
             }
 
-            return weaponType;
+
+
+            return response;
         }
 
         // PUT: api/WeaponType/5
