@@ -22,10 +22,10 @@ what's this API about?
 > Monster Hunter API allows a client to see information about player, player's weapon, and its weapon type.
 
 endpoints that a client can use:
-> 3 endpoints and available HTTP methods for each endpoint are following: <b />
+> 3 endpoints and available HTTP methods for each endpoint are following: <br />
 ```GET, PUT, DELETE     api/Player``` <br />
 ```GET, PUT, DELETE     api/Weapon``` <br />
-```GET     api/WeaponType```
+```GET                  api/WeaponType```
 
 sample request body:
 > this is request body
