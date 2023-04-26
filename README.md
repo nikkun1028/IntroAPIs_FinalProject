@@ -45,13 +45,14 @@ endpoints and HTTP methods that a client can use:
 sample request/response body:
 > this is a request body for POST api/Player <br />
 any misspelling of the property name will cause it to be null <br />
-which will possibly throw an error because of the database constraints.
+which will possibly throw an error because of the database constraints. <br />
+if 
 ```
 {
   "playerName": "example_name", 
   "weapon": {
     "weaponType": {
-      "weaponTypeID": 1,
+      "weaponTypeID": 1, // this is illegal, throws error
       "weaponTypeName": "Great Sword"
     },
     "weaponName": "example_weapon",
@@ -79,7 +80,8 @@ sample response body:
 <br />
 
 ## Problems/Concerns:
-Wanted to add more to the database about Monsters too, but it's going to be useless for this project (since it's not connected to any of other tables) so I decided not to include here. Also I gave up implementing Armors tables since I thought connecting 6 different tables to just Player table might be too much. I wanted this project to be less data. 😃
+Wanted to add more to the database about Monsters too, but it's going to be useless for this project (since it's not connected to any of other tables) so I decided not to include here. Also I gave up implementing Armors tables since I thought connecting 6 different tables to just Player table might be too much. I wanted this project to be less data. 😃 <br />
+Another major problem is that whenever you try to do `POST api/Player` it tries to create a new weaponType item with duplicated WeaponTypeID (which results an error) if you implement it into the request body. So, if you want to reference the weapon instead of assigning new weapon to the player, you need to do `PUT api/Player/ID`😭
 
 <br />
 <br />
