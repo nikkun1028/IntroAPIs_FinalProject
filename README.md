@@ -23,14 +23,26 @@ what's this API about?
 
 endpoints that a client can use:
 > 3 endpoints and available HTTP methods for each endpoint are following: <br />
-```GET, PUT, DELETE     api/Player``` <br />
-```GET, PUT, DELETE     api/Weapon``` <br />
+```GET, POST, DELETE     api/Player``` <br />
+```GET, POST, DELETE     api/Weapon``` <br />
 ```GET                  api/WeaponType```
 
 sample request body:
-> this is request body <br />
-```PUT    https://localhost:7265/api/Player``` <br />
-```{}```
+> this is request body for POST api/Player <br />
+```
+{
+  "playerName": "example_name", 
+  "weapon": {
+    "weaponType": {
+      "weaponTypeID": 1,
+      "weaponTypeName": "Great Sword"
+    },
+    "weaponName": "example_weapon",
+    "atk": 100,
+    "critical": 0
+  }
+}
+```
 
 
 
