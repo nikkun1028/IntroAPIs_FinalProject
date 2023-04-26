@@ -43,29 +43,27 @@ endpoints and HTTP methods that a client can use:
 
 
 sample request/response body:
-> this is a request body for POST api/Player <br />
+> this is a request body for `POST api/Player` <br />
 any misspelling of the property name will cause it to be null <br />
 which will possibly throw an error because of the database constraints. <br />
-if 
+Below is when you want assign a weapon to a new player `example_name` <br />
 ```
 {
   "playerName": "example_name", 
-  "weapon": {
-    "weaponType": {
-      "weaponTypeID": 1, // this is illegal, throws error
-      "weaponTypeName": "Great Sword"
-    },
-    "weaponName": "example_weapon",
-    "atk": 100,
-    "critical": 0
-  }
+  "weapon": null
+}
+```
+and you will need to do `PUT api/Player/ID` after the POST <br />
+in order to edit info about the weapon (to something not null) <br />
+```
+{
+
 }
 ```
 
 
-
 sample response body:
-> this is a response body for GET api/Weapon/4 <br />
+> this is a response body for `GET api/Weapon/4` <br />
 ```
 {
   "statusCode": 200,
