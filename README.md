@@ -23,9 +23,9 @@ what's this API about?
 
 endpoints that a client can use:
 > 3 endpoints and available HTTP methods for each endpoint are following: <br />
-```GET, POST, DELETE     api/Player``` <br />
-```GET, POST, DELETE     api/Weapon``` <br />
-```GET                  api/WeaponType```
+`GET, api/Player` `GET, api/Player/ID` <br />
+`POST, api/Player` `DELETE, api/Player/ID` <br />
+
 
 sample request body:
 > this is a request body for POST api/Player <br />
