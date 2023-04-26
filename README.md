@@ -1,11 +1,9 @@
 ## FinalProject
-CSCI 39537 Intro to APIs
+CSCI 39537 Intro to APIs - MonsterHunter APIs
 <br />
 Due 4/26/2023 at 11:40PM
 <br />
 Rei Imai (24134776)
-<br />
-Monster Hunter API
 <br />
 <br />
 
