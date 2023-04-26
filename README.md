@@ -28,7 +28,9 @@ endpoints that a client can use:
 ```GET                  api/WeaponType```
 
 sample request body:
-> this is request body for POST api/Player <br />
+> this is a request body for POST api/Player <br />
+any misspelling of the property name will cause it to be null <br />
+which will possibly throw an error from the database constraints.
 ```
 {
   "playerName": "example_name", 
@@ -47,14 +49,22 @@ sample request body:
 
 
 sample response body:
-> this is response body for GET api/Weapon/4 <br />
-```{"weaponID":4,"weaponType":null,"weaponName":"Kamura Glintblades I","atk":50,"critical":0}```
+> this is a response body for GET api/Weapon/4 <br />
+```
+{
+  "weaponID": 4,
+  "weaponType": null,
+  "weaponName": "Kamura Glintblades I",
+  "atk": 50,
+  "critical": 0
+}
+```
 
 <br />
 <br />
 
 ## Problems/Concerns:
-Wanted to add more to the database about Monsters too, but it's going to be useless (since not really connected to any of other tables) for this project so I decided not to include here. 
+Wanted to add more to the database about Monsters too, but it's going to be useless for this project (since it's not connected to any of other tables) so I decided not to include here. 
 
 <br />
 <br />
