@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -70,11 +71,18 @@ namespace MonsterHunterAPI.Controllers
         // PUT: api/Weapon/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutWeapon(int id, Weapon weapon)
+        public async Task<ActionResult<ResponseWeapon>> PutWeapon(int id, Weapon weapon)
         {
+            var response = new ResponseWeapon();
+
+            response.statusCode = 404;
+            response.statusDescription = "ID Not Found";
+
             if (id != weapon.WeaponID)
             {
-                return BadRequest();
+                response.statusCode = 400;
+                response.statusDescription = "Bad Request, Bad Inputs";
+                return response;
             }
 
             _context.Entry(weapon).State = EntityState.Modified;
@@ -87,7 +95,7 @@ namespace MonsterHunterAPI.Controllers
             {
                 if (!WeaponExists(id))
                 {
-                    return NotFound();
+                    return response;
                 }
                 else
                 {
@@ -95,44 +103,79 @@ namespace MonsterHunterAPI.Controllers
                 }
             }
 
-            return NoContent();
+            response.statusCode = 204;
+            response.statusDescription = "Item Updated";
+            response.weapons.Add(weapon);
+
+            return response;
         }
         
+
+
 
         // POST: api/Weapon
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Weapon>> PostWeapon(Weapon weapon)
+        public async Task<ActionResult<ResponseWeapon>> PostWeapon(Weapon weapon)
         {
-          if (_context.Weapons == null)
-          {
-              return Problem("Entity set 'MonsterHunterDBContext.Weapons'  is null.");
-          }
-            _context.Weapons.Add(weapon);
-            await _context.SaveChangesAsync();
+            var response = new ResponseWeapon();
 
-            return CreatedAtAction("GetWeapon", new { id = weapon.WeaponID }, weapon);
+            response.statusCode = 404;
+            response.statusDescription = "Entity Set Weapon Not Found";
+
+            if (_context.Weapons != null)
+            {
+                //return Problem("Entity set 'MonsterHunterDBContext.WeaponTypes'  is null.");
+                _context.Weapons.Add(weapon);
+                await _context.SaveChangesAsync();
+
+
+
+                response.statusCode = 201;
+                response.statusDescription = "Item Created";
+                response.weapons.Add(weapon);
+            }
+
+
+
+            return response;
         }
+
+
 
         // DELETE: api/Weapon/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWeapon(int id)
+        public async Task<ActionResult<ResponseWeapon>> DeleteWeapon(int id)
         {
-            if (_context.Weapons == null)
+            var response = new ResponseWeapon();
+
+            response.statusCode = 404;
+            response.statusDescription = "Not Found";
+
+            if (_context.Weapons != null)
             {
-                return NotFound();
-            }
-            var weapon = await _context.Weapons.FindAsync(id);
-            if (weapon == null)
-            {
-                return NotFound();
+                var weapon = await _context.Weapons.FindAsync(id);
+                if (weapon != null)
+                {
+
+                    _context.Weapons.Remove(weapon);
+                    await _context.SaveChangesAsync();
+
+                    response.statusCode = 204;
+                    response.statusDescription = "Item Deleted";
+                    response.weapons.Add(weapon);
+
+                }
+
+
             }
 
-            _context.Weapons.Remove(weapon);
-            await _context.SaveChangesAsync();
 
-            return NoContent();
+            return response;
         }
+
+
+
 
         private bool WeaponExists(int id)
         {

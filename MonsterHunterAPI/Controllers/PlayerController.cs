@@ -61,15 +61,24 @@ namespace MonsterHunterAPI.Controllers
             return response;
         }
 
+
+
         
         // PUT: api/Player/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPlayer(int id, Player player)
+        public async Task<ActionResult<ResponsePlayer>> PutPlayer(int id, Player player)
         {
+            var response = new ResponsePlayer();
+
+            response.statusCode = 404;
+            response.statusDescription = "ID Not Found";
+
             if (id != player.PlayerID)
             {
-                return BadRequest();
+                response.statusCode = 400;
+                response.statusDescription = "Bad Request, Bad Inputs";
+                return response;
             }
 
             _context.Entry(player).State = EntityState.Modified;
@@ -82,7 +91,7 @@ namespace MonsterHunterAPI.Controllers
             {
                 if (!PlayerExists(id))
                 {
-                    return NotFound();
+                    return response;
                 }
                 else
                 {
@@ -90,9 +99,15 @@ namespace MonsterHunterAPI.Controllers
                 }
             }
 
-            return NoContent();
+            response.statusCode = 204;
+            response.statusDescription = "Item Updated";
+            response.players.Add(player);
+
+            return response;
         }
-        
+
+
+
 
         // POST: api/Player
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -126,23 +141,38 @@ namespace MonsterHunterAPI.Controllers
 
         // DELETE: api/Player/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePlayer(int id)
+        public async Task<ActionResult<ResponsePlayer>> DeletePlayer(int id)
         {
-            if (_context.Players == null)
-            {
-                return NotFound();
-            }
-            var player = await _context.Players.FindAsync(id);
-            if (player == null)
-            {
-                return NotFound();
-            }
+            var response = new ResponsePlayer();
 
-            _context.Players.Remove(player);
-            await _context.SaveChangesAsync();
+            response.statusCode = 404;
+            response.statusDescription = "Not Found";
 
-            return NoContent();
+            if (_context.Players != null)
+            {
+               var player = await _context.Players.FindAsync(id);
+               if (player != null)
+               {
+
+                    _context.Players.Remove(player);
+                    await _context.SaveChangesAsync();
+
+                    response.statusCode = 204;
+                    response.statusDescription = "Item Deleted";
+                    response.players.Add(player);
+
+                }
+
+
+            }
+            
+
+            return response;
         }
+
+
+
+
 
         private bool PlayerExists(int id)
         {
