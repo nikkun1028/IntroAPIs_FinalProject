@@ -31,6 +31,7 @@ endpoints and HTTP methods that a client can use:
 `GET, api/Player` will return a list of all players <br />
 `GET, api/Player/ID` will return a player of ID specified <br />
 `POST, api/Player` will add a new player to the players list <br />
+`PUT, api/Player/ID` will update the player information <br />
 `DELETE, api/Player/ID` will delete the player with ID from the list <br />
 `GET, api/Weapon` will return a list of all weapons <br />
 `GET, api/Weapon/ID` will return a weapon of ID specified <br />
@@ -46,7 +47,7 @@ sample request body:
 > this is a request body for `POST api/Player` <br />
 any misspelling of the property name will cause it to be null <br />
 which will possibly throw an error because of the database constraints. <br />
-Below is when you want assign a weapon to a new player `example_name` <br />
+Below is when you want to assign a weapon to a new player `example_name` <br />
 ```
 {
   "playerName": "example_name", 
@@ -57,7 +58,17 @@ and you will need to do `PUT api/Player/ID` after the POST <br />
 in order to edit info about the weapon (to something not null) <br />
 ```
 {
-
+"playerID": ID, // here should be a number
+  "playerName": "example_name", 
+  "weapon": {
+      "weaponType": {
+          "weaponTypeID": 1,
+          "weaponTypeName": "Great Sword"
+      },
+      "weaponName": "Kamura Cleaver I",
+      "atk": 50,
+      "critical": 0
+  }
 }
 ```
 
