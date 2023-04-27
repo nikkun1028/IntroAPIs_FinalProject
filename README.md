@@ -55,7 +55,7 @@ Below is when you want to assign a weapon to a new player `example_name` <br />
   "weapon": null
 }
 ```
-and you will need to do `PUT api/Player/ID` after the POST <br />
+> and you will need to do `PUT api/Player/ID` after the POST <br />
 in order to edit info about the weapon (to something not null) <br />
 ```
 {
