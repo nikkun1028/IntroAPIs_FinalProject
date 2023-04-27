@@ -36,6 +36,7 @@ endpoints and HTTP methods that a client can use:
 `GET, api/Weapon` will return a list of all weapons <br />
 `GET, api/Weapon/ID` will return a weapon of ID specified <br />
 `POST, api/Weapon` will add a new weapon to the weapons list <br />
+`PUT, api/Weapon/ID` will update the weapon information <br />
 `DELETE, api/Weapon/ID` will delete the weapon with ID from the list <br />
 `GET, api/WeaponType` will return a list of all weapon types <br />
 `GET, api/WeaponType/ID` will return a weapon type of ID specified <br />
@@ -90,7 +91,7 @@ sample response body:
 
 ## Problems/Concerns:
 Wanted to add more to the database about Monsters too, but it's going to be useless for this project (since it's not connected to any of other tables) so I decided not to include here. Also I gave up implementing Armors tables since I thought connecting 6 different tables to just Player table might be too much. I wanted this project to be less data. 😃 <br />
-Another major problem is that whenever you try to do `POST api/Player` it tries to create a new weaponType item with duplicated WeaponTypeID (which results an error) if you implement it into the request body. So, if you want to reference the weapon instead of assigning new weapon to the player, you need to do `PUT api/Player/ID`😭
+Another major problem is that whenever you try to do `POST api/Player` it tries to create a new weaponType item with duplicated WeaponTypeID (which results an error) if you implement it into the request body. So, if you want to reference the existing weapon instead of assigning new weapon to the player, you need to do `PUT api/Player/ID`😭
 
 <br />
 <br />
