@@ -21,7 +21,7 @@ Rei Imai (24134776)
 what's this API about?
 > Monster Hunter API allows a client to see information about player, player's weapon equipment, and its weapon type.
 
-endpoints and HTTP methods that a client can use:
+### Endpoints and HTTP methods:
 > 3 endpoints are following: <br />
 `api/Player` <br />
 `api/Weapon` <br />
@@ -43,46 +43,107 @@ endpoints and HTTP methods that a client can use:
 
 
 
-
-sample request body:
-> this is a request body for `POST api/Player` <br />
-any misspelling of the property name will cause it to be null <br />
-which will possibly throw an error because of the database constraints. <br />
-Below is when you want to assign a weapon to a new player `example_name` <br />
+### Sample Request Body:
+1. `POST api/Player` <br />
+> if you want to add Player with unspecified weapon:
 ```
 {
   "playerName": "example_name", 
   "weapon": null
 }
 ```
-> and you will need to do `PUT api/Player/ID` after the POST <br />
-in order to edit info about the weapon (to something not null) <br />
+> if you want to add Player with specified weapon: <br />
+where that weapon already exist in the database,
 ```
 {
-"playerID": ID, // here should be a number
-  "playerName": "example_name", 
+  "playerName": "example_name",
   "weapon": {
-      "weaponType": {
-          "weaponTypeID": 1,
-          "weaponTypeName": "Great Sword"
-      },
-      "weaponName": "Kamura Cleaver I",
-      "atk": 50,
-      "critical": 0
+    "weaponID": integer, // pick weaponID that exist in GET api/Weapon
+    "weaponType": null,
+    "weaponName": "anyName", // as long as weaponID is correct, 
+    // other properties will be automatically corrected to the ones match with weaponID
+    // such as weaponType, weaponName, atk, critical
+    "atk": any_integer,
+    "critical": any_integer
   }
+}
+```
+> if you want to add Player with specified weapon: <br />
+where that weapon DOES NOT exist in the databse,
+```
+{
+  "playerName": "example_name",
+  "weapon": {
+    "weaponID": integer, // make sure you pick number that's NOT in GET api/Weapon
+    "weaponType": {
+      "weaponTypeID": integer, // between 1~14, otherwise throws bad response
+      "weaponTypeName": "anyName" // as long as weaponTypeID is correct, same logic as above
+    },
+    "weaponName": "newWeapon_name",
+    "atk": any_integer,
+    "critical": any_integer
+  }
+}
+```
+2. `PUT api/Player/ID` <br />
+> if you want to update Player, into NO weapon: <br />
+```
+{
+  "playerID": ID, // make sure it matches with ID written in your endpoint
+  "playerName": "modified_name", // doesn't have to be diffent name
+  "weapon": null
+}
+```
+> if you want to update Player, into different weapon: <br />
+where that weapon DOES or DOES NOT exist in the database, <br />
+it's the same logic as `POST api/Player`, so I will skip here 👍 <br /> <br />
+
+3. `POST api/Weapon` <br />
+```
+{
+  "weaponType": { // CANNOT BE NULL!!! it will throw a bad response anyways
+    "weaponTypeID": integer, // between 1~14
+    "weaponTypeName": "anyName" // it will be automatically corrected with the one matches with weaponTypeID
+  },
+  "weaponName": "newWeapon_name",
+  "atk": any_integer,
+  "critical": any_integer
+}
+```
+4. `PUT api/Weapon/ID` <br />
+```
+{
+  "weaponID": integer, // make sure it matches with ID written in your endpoint
+  "weaponType": { // CANNOT BE NULL
+    "weaponTypeID": integer, // between 1~14
+    "weaponeTypeName": "anyName" 
+  },
+  "weaponName": "modified_name", // doesn't have to be modified
+  "atk": modified_integer,
+  "critical": modified_integer
 }
 ```
 
 
-sample response body:
+
+### Sample Response Body:
 > this is a response body for `GET api/Weapon/4` <br />
 ```
 {
   "statusCode": 200,
   "statusDescription": "GET successful",
-  "weapons":[{ 
-    "weaponID":4,"weaponType":null,"weaponName":"Kamura Glintblades I","atk":50,"critical":0
-   }]
+  "weapons":[
+    { 
+      "weaponID": 4,
+      "weaponType":{
+        "weaponTypeID": 4,
+        "weaponTypeName": "Dual Blades"
+      },
+      "weaponName": "Kamura Glintblades I",
+      "atk": 50,
+      "critical": 0
+   }
+  ]
 }
 ```
 
@@ -90,8 +151,7 @@ sample response body:
 <br />
 
 ## Problems/Concerns:
-Wanted to add more to the database about Monsters too, but it's going to be useless for this project (since it's not connected to any of other tables) so I decided not to include here. Also I gave up implementing Armors tables since I thought connecting 6 different tables to just Player table might be too much. I wanted this project to be less data. 😃 <br />
-Another major problem is that whenever you try to do `POST api/Player` it tries to create a new weaponType item with duplicated WeaponTypeID (which results an error) if you implement it into the request body. So, if you want to reference the existing weapon instead of assigning new weapon to the player, you need to do `PUT api/Player/ID`😭
+Wanted to add more to the database about Monsters too, but it's going to be useless for this project (since it's not connected to any of other tables) so I decided not to include here. Also I gave up implementing Armors tables since it's too many. I wanted this project to be less data. 😃 <br />
 
 <br />
 <br />
