@@ -28,18 +28,9 @@ what's this API about?
 `api/WeaponType` <br/>
 
 > HTTP methods for each endpoint: <br />
-`GET, api/Player` will return a list of all players <br />
-`GET, api/Player/ID` will return a player of ID specified <br />
-`POST, api/Player` will add a new player to the players list <br />
-`PUT, api/Player/ID` will update the player information <br />
-`DELETE, api/Player/ID` will delete the player with ID from the list <br />
-`GET, api/Weapon` will return a list of all weapons <br />
-`GET, api/Weapon/ID` will return a weapon of ID specified <br />
-`POST, api/Weapon` will add a new weapon to the weapons list <br />
-`PUT, api/Weapon/ID` will update the weapon information <br />
-`DELETE, api/Weapon/ID` will delete the weapon with ID from the list <br />
-`GET, api/WeaponType` will return a list of all weapon types <br />
-`GET, api/WeaponType/ID` will return a weapon type of ID specified <br />
+`(GET, POST, PUT, DELETE)` for `api/Player` <br />
+`(GET, POST, PUT, DELETE)` for `api/Weapon` <br />
+`(GET)` for `api/WeaponType`
 
 
 
