@@ -28,7 +28,7 @@ namespace MonsterHunterAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponseWeapon>> GetWeapons()
         {
-            var weapons = await _context.Weapons.ToListAsync();
+            var weapons = await _context.Weapons.Include(w => w.WeaponType).ToListAsync();
             var response = new ResponseWeapon();
 
             response.statusCode = 404;
@@ -48,7 +48,8 @@ namespace MonsterHunterAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseWeapon>> GetWeapon(int id)
         {
-            var weapons = await _context.Weapons.FindAsync(id);
+            var weapons = await _context.Weapons.Include(w => w.WeaponType)
+                .FirstOrDefaultAsync(w => w.WeaponID == id);
             var response = new ResponseWeapon();
 
             response.statusCode = 404;
@@ -81,9 +82,29 @@ namespace MonsterHunterAPI.Controllers
             if (id != weapon.WeaponID)
             {
                 response.statusCode = 400;
-                response.statusDescription = "Bad Request, Bad Inputs";
+                response.statusDescription = "Bad Inputs, weaponID doesn't match";
                 return response;
             }
+
+
+            if (weapon.WeaponType != null)
+            {
+                if (weapon.WeaponType.WeaponTypeID < 1 ||
+                    weapon.WeaponType.WeaponTypeID > 14)
+                {
+                    response.statusCode = 400;
+                    response.statusDescription = "waponTypeID out of range";
+                    return response;
+                }
+
+                if ((_context.WeaponTypes?.Any(w => w.WeaponTypeID == weapon.WeaponType.WeaponTypeID)).GetValueOrDefault())
+                {
+                    weapon.WeaponType = await _context.WeaponTypes
+                        .FindAsync(weapon.WeaponType.WeaponTypeID);
+                    // map weaponType to this weapon
+                }
+            }
+
 
             _context.Entry(weapon).State = EntityState.Modified;
 
@@ -125,9 +146,34 @@ namespace MonsterHunterAPI.Controllers
 
             if (_context.Weapons != null)
             {
-                //return Problem("Entity set 'MonsterHunterDBContext.WeaponTypes'  is null.");
+                if (weapon.WeaponType == null)
+                {
+                    response.statusCode = 400;
+                    response.statusDescription = "waponType cannot be null";
+                    return response;
+                }
+                
+                if (weapon.WeaponType.WeaponTypeID < 1 ||
+                        weapon.WeaponType.WeaponTypeID > 14)
+                {
+                    response.statusCode = 400;
+                    response.statusDescription = "waponTypeID out of range";
+                    return response;
+                }
+
+                if ((_context.WeaponTypes?.Any(w => w.WeaponTypeID == weapon.WeaponType.WeaponTypeID)).GetValueOrDefault())
+                {
+                    weapon.WeaponType = await _context.WeaponTypes
+                        .FindAsync(weapon.WeaponType.WeaponTypeID);
+                    // map weaponType to this weapon
+                }
+
+                    
+                
+             
                 _context.Weapons.Add(weapon);
                 await _context.SaveChangesAsync();
+
 
 
 
@@ -154,12 +200,42 @@ namespace MonsterHunterAPI.Controllers
 
             if (_context.Weapons != null)
             {
-                var weapon = await _context.Weapons.FindAsync(id);
+                var weapon = await _context.Weapons.Include(w => w.WeaponType)
+                    .FirstOrDefaultAsync(w => w.WeaponID == id);
                 if (weapon != null)
                 {
+                    var player = await _context.Players.Include(p => p.Weapon)
+                        .Include(p => p.Weapon.WeaponType)
+                        .FirstOrDefaultAsync(p => p.Weapon.WeaponID == id);
 
-                    _context.Weapons.Remove(weapon);
-                    await _context.SaveChangesAsync();
+                    if (player != null)
+                    { // if there's a player holding this weapon, set player.weapon to null
+                        player.Weapon = null;
+                        _context.Weapons.Remove(weapon);
+                        _context.Entry(player).State = EntityState.Modified;
+
+                        try
+                        {
+                            await _context.SaveChangesAsync();
+                        }
+                        catch (DbUpdateConcurrencyException)
+                        {
+                            if (!WeaponExists(id))
+                            {
+                                return response;
+                            }
+                            else
+                            {
+                                throw;
+                            }
+                        }
+                    }
+                    else // if no player has that weapon
+                    {
+                        _context.Weapons.Remove(weapon);
+                        await _context.SaveChangesAsync();
+                    }
+
 
                     response.statusCode = 204;
                     response.statusDescription = "Item Deleted";

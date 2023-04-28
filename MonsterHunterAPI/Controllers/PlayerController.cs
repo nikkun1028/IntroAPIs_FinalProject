@@ -24,7 +24,10 @@ namespace MonsterHunterAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<ResponsePlayer>> GetPlayers()
         {
-            var player = await _context.Players.ToListAsync();
+            //var player = await _context.Players.ToListAsync();
+            var player = await _context.Players.Include(p => p.Weapon)
+                .Include(p => p.Weapon.WeaponType).ToListAsync();
+
             var response = new ResponsePlayer();
 
             response.statusCode = 404;
@@ -36,6 +39,8 @@ namespace MonsterHunterAPI.Controllers
                 response.players.AddRange(player);
             }
 
+        
+
             return response;
         }
 
@@ -43,7 +48,8 @@ namespace MonsterHunterAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponsePlayer>> GetPlayer(int id)
         {
-            var player = await _context.Players.FindAsync(id);
+            var player = await _context.Players.Include(p => p.Weapon)
+                .Include(p => p.Weapon.WeaponType).FirstOrDefaultAsync(p => p.PlayerID == id);
             var response = new ResponsePlayer();
 
             response.statusCode = 404;
@@ -77,9 +83,56 @@ namespace MonsterHunterAPI.Controllers
             if (id != player.PlayerID)
             {
                 response.statusCode = 400;
-                response.statusDescription = "Bad Request, Bad Inputs";
+                response.statusDescription = "Bad Inputs, playerID doesn't match";
                 return response;
             }
+
+
+            // update weapon when it's not null
+            if (player.Weapon != null)
+            {
+
+                if ((_context.Weapons?.Any(w => w.WeaponID == player.Weapon.WeaponID)).GetValueOrDefault())
+                {
+                    player.Weapon = await _context.Weapons.Include(w => w.WeaponType)
+                        .FirstOrDefaultAsync(w => w.WeaponID == player.Weapon.WeaponID);
+                    // map weapon to this player if exist
+                }
+                else // when weaponID doesn't exist, create new weapon
+                {
+                    if (player.Weapon.WeaponID <= 0)
+                    {
+                        response.statusCode = 400;
+                        response.statusDescription = "Bad Inputs, illegal waponID";
+                        return response;
+                    }
+
+                    // check weaponType is in the range 1~14
+                    if (player.Weapon.WeaponType == null)
+                    {
+                        response.statusCode = 400;
+                        response.statusDescription = "waponType cannot be null";
+                        return response;
+                    }
+
+                    if (player.Weapon.WeaponType.WeaponTypeID < 1 ||
+                            player.Weapon.WeaponType.WeaponTypeID > 14)
+                    {
+                        response.statusCode = 400;
+                        response.statusDescription = "waponTypeID out of range";
+                        return response;
+                    }
+
+                    // map weaponType to this player's weapon
+                    player.Weapon.WeaponType = await _context.WeaponTypes
+                        .FindAsync(player.Weapon.WeaponType.WeaponTypeID);
+
+                    // add new Weapon to database
+                    _context.Weapons.Add(player.Weapon);
+                }
+
+            }
+
 
             _context.Entry(player).State = EntityState.Modified;
 
@@ -98,6 +151,7 @@ namespace MonsterHunterAPI.Controllers
                     throw;
                 }
             }
+
 
             response.statusCode = 204;
             response.statusDescription = "Item Updated";
@@ -121,7 +175,45 @@ namespace MonsterHunterAPI.Controllers
 
             if (_context.Players != null)
             {
-                //return Problem("Entity set 'MonsterHunterDBContext.WeaponTypes'  is null.");
+
+
+                if (player.Weapon != null)
+                {
+
+                    if ((_context.Weapons?.Any(w => w.WeaponID == player.Weapon.WeaponID)).GetValueOrDefault())
+                    {
+                        player.Weapon = await _context.Weapons.Include(w => w.WeaponType)
+                            .FirstOrDefaultAsync(w => w.WeaponID == player.Weapon.WeaponID);
+                        // map weapon to this player
+                    }
+                    else // when weaponID doesn't exist, create new weapon
+                    {
+
+                        // check weaponType is in the range 1~14
+                        if (player.Weapon.WeaponType == null)
+                        {
+                            response.statusCode = 400;
+                            response.statusDescription = "waponType cannot be null";
+                            return response;
+                        }
+
+                        if (player.Weapon.WeaponType.WeaponTypeID < 1 ||
+                                player.Weapon.WeaponType.WeaponTypeID > 14)
+                        {
+                            response.statusCode = 400;
+                            response.statusDescription = "waponTypeID out of range";
+                            return response;
+                        }
+
+                        // map weaponType to this player's weapon
+                        player.Weapon.WeaponType = await _context.WeaponTypes
+                            .FindAsync(player.Weapon.WeaponType.WeaponTypeID);
+
+                    }
+
+                }
+
+
                 _context.Players.Add(player);
                 await _context.SaveChangesAsync();
 
@@ -137,6 +229,8 @@ namespace MonsterHunterAPI.Controllers
 
 
         }
+
+
 
 
         // DELETE: api/Player/5
